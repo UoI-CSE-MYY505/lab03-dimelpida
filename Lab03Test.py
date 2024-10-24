@@ -83,22 +83,22 @@ maxSteps = 10000
 filename = 'lab03.s'
 try:
     (labelMap, coreDumpData, returncode, errors, simout, regCheck) = runSim(filename, newLabels, newMainCode, simSteps=maxSteps, lab1Hack=False)
-    #print("Simulation returned %d" %(returncode))   # Print the simulator exit code. 0 should mean OK
-    #print("Stderr:") # The simulator standard error
-    #for line in errors:
-    #    print(line)
-    #print("stdout:") # The simulator standard output
-    #for line in simout:
-    #    print(line)
-    #print("Saved regs unexpected results:") # savedRegs={} here, so there is nothing to see.
-    #for line in regCheck:
-    #    print(line)
-    #print("Data labels:")  # The address (hex, decimal) for each data label
-    #for label in labelMap.keys():
-    #    print("%s 0x%x (%d)" %(label, labelMap[label], labelMap[label]))
-    #print("Integer registers at program exit") 
-    #for reg in coreDumpData['registers']['integer'].keys():
-    #    print("x%2s 0x%x (%d)" %(reg, coreDumpData['registers']['integer'][reg], coreDumpData['registers']['integer'][reg]))
+    print("Simulation returned %d" %(returncode))   # Print the simulator exit code. 0 should mean OK
+    print("Stderr:") # The simulator standard error
+    for line in errors:
+        print(line)
+    print("stdout:") # The simulator standard output
+    for line in simout:
+        print(line)
+    print("Saved regs unexpected results:") # savedRegs={} here, so there is nothing to see.
+    for line in regCheck:
+        print(line)
+    print("Data labels:")  # The address (hex, decimal) for each data label
+    for label in labelMap.keys():
+        print("%s 0x%x (%d)" %(label, labelMap[label], labelMap[label]))
+    print("Integer registers at program exit") 
+    for reg in coreDumpData['registers']['integer'].keys():
+        print("x%2s 0x%x (%d)" %(reg, coreDumpData['registers']['integer'][reg], coreDumpData['registers']['integer'][reg]))
     
     # Check the expected results and print any differences
     for line in checkSimResults(expected, coreDumpData, labelMap):

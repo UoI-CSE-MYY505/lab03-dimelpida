@@ -46,11 +46,11 @@ image565:
 #     to the size of the image888 (6, 19 in this example)
 # - This will enable the LED matrix
 # - Uncomment the following and you should see the image on the LED matrix!
-#    la   a0, image888
-#    li   a1, LED_MATRIX_0_BASE
-#    li   a2, LED_MATRIX_0_WIDTH
-#    li   a3, LED_MATRIX_0_HEIGHT
-#    jal  ra, showImage
+    la   a0, image888
+    li   a1, LED_MATRIX_0_BASE
+    li   a2, LED_MATRIX_0_WIDTH
+    li   a3, LED_MATRIX_0_HEIGHT
+    jal  ra, showImage
 # ----- This is where the fun part ends!
 
     la   a0, image888
@@ -99,8 +99,42 @@ outShowRowLoop:
 
 rgb888_to_rgb565:
 # ----------------------------------------
-# Write your code here.
-# You may move the "return" instruction (jalr zero, ra, 0).
+    add t0, zero, zero #counter grammis
+rowsloop: 
+    bge t0,a2, endrloop #an t0>=a2 vges apo to loop 
+    add t1, zero, zero # an den isxuei to parapanw dhl. an t0<a2 arx. counter sthlhs    
+columnsloop: 
+    bge t1, a1, endcloop #am  t1>=a1 vges apo to loop 
+    
+    lbu t2, 0(a0) #fortwnei byte apo diefth mnimis a0+0 ston t2 R
+    lbu t3, 1(a0) #fortwnei byte apo a0+1 G
+    lbu t3, 2(a0) #fortwnei apo a0+2 B
+    
+    andi t2, t2, 0xf8 #kanei logiko and ths timis tou R kanaliou kai tou arithmou 11111000 gia na diagrafoun ta teleutaia pshfia
+    slli t2, t2,8 #olisthainei thn timh tou t2 8 theseis aristera gia na parw ta 5 msb
+    
+    andi t3, t3, 0xfc #kanei logiko and me timh tou G kai tou 11111100 gia na diagrapsei ta 2 lsb
+    slli t3, t3, 3 # olisthainei 3 theseis aristera gia na mpoun ta 6 msb 
+    
+    andi t4, t4,0xf8 #logiko and tou B kai tou arithmou 11111000 gia na fugoun ta 3 lsb 
+    slli t4, t4, 3
+    
+    or t2, t2, t3 #sundiazei tis times twn R kai G 
+    or t2, t2, t4 
+    
+    sh t2, 0(a3) #apothikeuei th 16 bit timh tou t2 sth diefth pou deixnei o a3, opou einai o pinakas gia RGB565 
+    addi a0,a0,3 #auksanei to a0 kata 3 (paei sto epomeno pixel ths RGB888)
+    addi a3,a3,2 #auksanei to a3 kata 2 (paie sto epomeno pixel ths RGB565)
+    addi t1,t1,1 #auksanei to metrith twn sthlwn kata 1(paei sthn epomenh sthlh)
+    
+    j columnsloop #ksanapaei sthn koryfi tou loop 
+    
+endcloop: #vgainei apo to columnsloop 
+    addi t0,t0,1  #auksanei kata 1 ton row counter (paei sthn epomenh grammh )
+    j rowsloop 
+    
+endrloop: #vgainei apo to rowsloop 
+    
     jalr zero, ra, 0
 
 
